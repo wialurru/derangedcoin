@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | $DERANGED - The Deranged Penguin</title>
+    <meta name="description" content="Latest news, updates, and stories from the $DERANGED community. Follow our journey to the mountains.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Blog specific styles */
+        .blog-hero {
+            padding: 120px 0 60px;
+            background: linear-gradient(180deg, rgba(30, 144, 255, 0.1) 0%, transparent 100%);
+            text-align: center;
+        }
+
+        .blog-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-container {
+            padding: 60px 0 100px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(30, 144, 255, 0.15);
+        }
+
+        .blog-card-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, #0066cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .blog-card-tag {
+            background: rgba(30, 144, 255, 0.2);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .blog-card-tag.announcement {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .blog-card-tag.update {
+            background: rgba(0, 255, 127, 0.2);
+            color: #00ff7f;
+        }
+
+        .blog-card-tag.charity {
+            background: rgba(255, 105, 180, 0.2);
+            color: #ff69b4;
+        }
+
+        .blog-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .blog-card h3 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .blog-card h3 a:hover {
+            color: var(--primary);
+        }
+
+        .blog-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 0.75rem;
+        }
+
+        /* Featured post */
+        .featured-post {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .featured-post .blog-card-image {
+            height: 100%;
+            min-height: 350px;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .featured-post .blog-card-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-post h3 {
+            font-size: 1.75rem;
+        }
+
+        .featured-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(0, 102, 204, 0.1) 100%);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .newsletter-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: #0066cc;
+            transform: scale(1.05);
+        }
+
+        /* Contract banner */
+        .contract-banner {
+            background: linear-gradient(90deg, rgba(30, 144, 255, 0.1), rgba(0, 102, 204, 0.1));
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .contract-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contract-banner-text span {
+            color: var(--text-secondary);
+        }
+
+        .contract-banner code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .contract-banner a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-post .blog-card-image {
+                border-radius: 16px 16px 0 0;
+                min-height: 200px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .contract-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contract-banner code {
+                font-size: 0.7rem;
+                word-break: break-all;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🐧</span>
+                <span class="logo-text">$DERANGED</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#story">Story</a>
+                <a href="index.html#tokenomics">Tokenomics</a>
+                <a href="index.html#charity">Charity</a>
+                <a href="index.html#roadmap">Roadmap</a>
+                <a href="whitepaper.html">Whitepaper</a>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="https://aerodrome.finance/swap?to=0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" class="btn btn-primary" target="_blank">Buy $DERANGED</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1>📰 The Deranged Blog</h1>
+            <p>News, updates, and stories from the most philosophical penguin in crypto</p>
+        </div>
+    </section>
+
+    <!-- Contract Banner -->
+    <section class="container">
+        <div class="contract-banner">
+            <div class="contract-banner-text">
+                <span>📍 Contract Address:</span>
+                <code>0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9</code>
+            </div>
+            <a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">View on BaseScan →</a>
+        </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="blog-container">
+        <div class="container">
+            <div class="blog-grid">
+
+                <!-- Featured Post - Launch Announcement -->
+                <article class="blog-card featured-post">
+                    <div class="blog-card-image">
+                        🚀
+                    </div>
+                    <div class="blog-card-content">
+                        <span class="featured-badge">⭐ Featured</span>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag announcement">Announcement</span>
+                            <span><i class="far fa-calendar"></i> January 27, 2026</span>
+                        </div>
+                        <h3><a href="#post-launch">$DERANGED is LIVE on Base Mainnet!</a></h3>
+                        <p>After weeks of development, testing, and preparation, we're thrilled to announce that $DERANGED has officially deployed to Base Mainnet. The deranged penguin has finally left the colony and is now walking toward the mountains.</p>
+                        <p style="margin-top: 1rem;"><strong>Contract Address:</strong> <code style="background: rgba(0,0,0,0.3); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9</code></p>
+                        <p style="margin-top: 0.5rem;">Our smart contract has been verified on BaseScan and Sourcify, featuring a deflationary mechanism with 2% burn on buys, 3% burn on sells, and 2% charity donation on every trade. The contract has passed 30+ tests and follows security best practices where taxes can only decrease, never increase.</p>
+                        <div class="blog-card-footer">
+                            <a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="read-more">View on BaseScan <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 2 - The Legend -->
+                <article class="blog-card" id="post-legend">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);">
+                        🎬
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Story</span>
+                            <span><i class="far fa-calendar"></i> January 27, 2026</span>
+                        </div>
+                        <h3><a href="#post-legend">The Legend: Werner Herzog's Deranged Penguin</a></h3>
+                        <p>In 2007, legendary filmmaker <strong>Werner Herzog</strong> and cinematographer Peter Zeitlinger traveled to Antarctica's McMurdo Station for the documentary "Encounters at the End of the World."</p>
+                        <p style="margin-top: 0.5rem;">Near the end of the film, Herzog interviews penguin scientist Dr. David Ainley about penguin psychology and mental illness. What he captured next became one of the most viral moments in documentary history.</p>
+                        <p style="margin-top: 0.5rem;"><em>"And then there was this one penguin. A deranged penguin. Heading toward the mountains, some 70 kilometers away..."</em></p>
+                        <p style="margin-top: 0.5rem;">The scene has become a widespread internet meme, symbolizing isolation, nihilism, and the absurdity of existence. In January 2026, it went viral again when the US Department of Homeland Security tweeted the video.</p>
+                        <div class="blog-card-footer">
+                            <a href="https://www.youtube.com/watch?v=6BB3YRtzRxE" target="_blank" class="read-more">Watch Documentary <i class="fas fa-play"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 3 - Charity -->
+                <article class="blog-card" id="post-charity">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #00ff7f 0%, #008844 100%);">
+                        🐧
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag charity">Charity</span>
+                            <span><i class="far fa-calendar"></i> January 27, 2026</span>
+                        </div>
+                        <h3><a href="#post-charity">2% Charity: Saving Real Penguins</a></h3>
+                        <p>Every trade of $DERANGED contributes <strong>2% to penguin conservation</strong>. We're partnering with real organizations making a difference:</p>
+                        <p style="margin-top: 0.5rem;"><strong>🌍 Global Penguin Society</strong> - Protected over 32 million acres of marine and coastal areas. Distributed 55,000+ educational books globally. Based in Patagonia, Argentina.</p>
+                        <p style="margin-top: 0.5rem;"><strong>🇦🇺 Penguin Foundation (Australia)</strong> - Protects Phillip Island's Little Penguins through research, wildlife rescue, and habitat conservation. Famous for their "penguin sweater" knitting program.</p>
+                        <p style="margin-top: 0.5rem;">Our charity wallet accumulates 2% of every buy and sell. We'll publish transparent donation reports monthly.</p>
+                        <div class="blog-card-footer">
+                            <a href="https://www.globalpenguinsociety.org/" target="_blank" class="read-more">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 4 - Documentary Deep Dive -->
+                <article class="blog-card" id="post-documentary">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #1e90ff 0%, #0066cc 100%);">
+                        🎥
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Documentary</span>
+                            <span><i class="far fa-calendar"></i> January 26, 2026</span>
+                        </div>
+                        <h3><a href="#post-documentary">"Encounters at the End of the World" - The Full Story</a></h3>
+                        <p>Released in 2007, this documentary was shot at McMurdo Station in Antarctica with just a two-person crew: Herzog and cinematographer Peter Zeitlinger.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Awards & Recognition:</strong></p>
+                        <ul style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            <li>🏆 Nominated for Best Documentary at 81st Academy Awards</li>
+                            <li>🎬 Won Best Documentary at Edinburgh Film Festival</li>
+                            <li>🍅 94% on Rotten Tomatoes</li>
+                            <li>⭐ 80/100 on Metacritic</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">The film is dedicated to Roger Ebert, who had recently lost his ability to speak due to cancer.</p>
+                        <div class="blog-card-footer">
+                            <a href="https://en.wikipedia.org/wiki/Encounters_at_the_End_of_the_World" target="_blank" class="read-more">Wikipedia <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 5 - Security -->
+                <article class="blog-card" id="post-security">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);">
+                        🔐
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag update">Security</span>
+                            <span><i class="far fa-calendar"></i> January 26, 2026</span>
+                        </div>
+                        <h3><a href="#post-security">Smart Contract Security: Our Approach</a></h3>
+                        <p>Security is paramount. Our smart contract was built with these principles:</p>
+                        <ul style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            <li>✅ <strong>30+ Unit Tests</strong> - Comprehensive test coverage</li>
+                            <li>✅ <strong>Taxes Only Decrease</strong> - Can never be raised</li>
+                            <li>✅ <strong>OpenZeppelin v5</strong> - Industry-standard libraries</li>
+                            <li>✅ <strong>Anti-Bot Protection</strong> - 3 block delay after trading enabled</li>
+                            <li>✅ <strong>Verified on BaseScan & Sourcify</strong> - Full transparency</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">The contract owner cannot mint new tokens, drain liquidity, or pause trading. Max transaction limit (1% of supply) protects against whale manipulation.</p>
+                        <div class="blog-card-footer">
+                            <a href="audit.html" class="read-more">View Audit Report <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 6 - Burn Mechanism -->
+                <article class="blog-card" id="post-burn">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+                        🔥
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Tokenomics</span>
+                            <span><i class="far fa-calendar"></i> January 25, 2026</span>
+                        </div>
+                        <h3><a href="#post-burn">Deflationary by Design: The Burn Mechanism</a></h3>
+                        <p>$DERANGED is a deflationary token. Every trade permanently reduces the supply:</p>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                            <p><strong>Buy Tax (4% total):</strong></p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">• 2% burned forever 🔥<br>• 2% to charity wallet 🐧</p>
+                            <p style="margin-top: 0.5rem;"><strong>Sell Tax (5% total):</strong></p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">• 3% burned forever 🔥<br>• 2% to charity wallet 🐧</p>
+                        </div>
+                        <p style="margin-top: 0.5rem;">As supply decreases and demand increases, scarcity drives value. Track burns live on our website.</p>
+                        <div class="blog-card-footer">
+                            <span class="read-more">Learn More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 7 - Why Base -->
+                <article class="blog-card" id="post-base">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #0052FF 0%, #003399 100%);">
+                        ⛓️
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag update">Guide</span>
+                            <span><i class="far fa-calendar"></i> January 25, 2026</span>
+                        </div>
+                        <h3><a href="#post-base">Why Base? Coinbase's L2 Explained</a></h3>
+                        <p>We chose <strong>Base</strong> - Coinbase's Layer 2 network - for several reasons:</p>
+                        <ul style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            <li>⚡ <strong>Low Fees</strong> - Transactions cost fractions of a cent</li>
+                            <li>🚀 <strong>Fast Transactions</strong> - Near-instant confirmations</li>
+                            <li>🏦 <strong>Coinbase Backing</strong> - Institutional credibility</li>
+                            <li>🌐 <strong>Growing Ecosystem</strong> - Aerodrome, Uniswap, and more</li>
+                            <li>🔗 <strong>Ethereum Security</strong> - Inherits L1 security</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">Bridge ETH to Base at <a href="https://bridge.base.org" target="_blank" style="color: var(--primary);">bridge.base.org</a></p>
+                        <div class="blog-card-footer">
+                            <a href="https://base.org" target="_blank" class="read-more">Learn About Base <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 8 - The Quote -->
+                <article class="blog-card" id="post-quote">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #374151 0%, #111827 100%);">
+                        💭
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Philosophy</span>
+                            <span><i class="far fa-calendar"></i> January 24, 2026</span>
+                        </div>
+                        <h3><a href="#post-quote">The Full Werner Herzog Quote</a></h3>
+                        <blockquote style="border-left: 3px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-secondary);">
+                            "I asked penguin scientist Dr. David Ainley about penguin mental illness... whether a penguin could become insane. And then there was this one. A deranged penguin. Heading toward the mountains, some 70 kilometers away. Even if he were to be caught and brought back to the colony, he would immediately head right back for the mountains."
+                        </blockquote>
+                        <p style="margin-top: 0.5rem;">This quote has become a symbol of existential rebellion - choosing one's own path even when it leads to certain doom. In crypto, we're all deranged penguins.</p>
+                        <div class="blog-card-footer">
+                            <span class="read-more">Embrace the Philosophy <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 9 - Internet Meme History -->
+                <article class="blog-card" id="post-meme">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        🌐
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Culture</span>
+                            <span><i class="far fa-calendar"></i> January 24, 2026</span>
+                        </div>
+                        <h3><a href="#post-meme">How the Deranged Penguin Went Viral (Again)</a></h3>
+                        <p>The "deranged penguin" clip has been an internet favorite since 2007, but it exploded again in early 2026:</p>
+                        <ul style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            <li>📅 <strong>December 2024</strong> - Kottke.org republishes "Werner Herzog's Nihilist Penguin"</li>
+                            <li>🔥 <strong>January 2026</strong> - Meme edits flood TikTok and Twitter</li>
+                            <li>🏛️ <strong>January 23, 2026</strong> - US Homeland Security tweets the video</li>
+                            <li>📈 <strong>January 27, 2026</strong> - $DERANGED launches on Base</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">The meme represents resilience, nihilism, and the absurdity of modern existence. Perfect for crypto.</p>
+                        <div class="blog-card-footer">
+                            <a href="https://x.com/DERANGEDCOIN" target="_blank" class="read-more">Join the Movement <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 10 - Roadmap -->
+                <article class="blog-card" id="post-roadmap">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                        🗺️
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Roadmap</span>
+                            <span><i class="far fa-calendar"></i> January 24, 2026</span>
+                        </div>
+                        <h3><a href="#post-roadmap">The 70km Journey: Our Roadmap</a></h3>
+                        <p>Like our penguin's 70km journey to the mountains, we have phases ahead:</p>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                            <p><strong>Phase 1: "Leaving the Colony"</strong> ✅</p>
+                            <p style="color: var(--text-secondary);">Contract deployed, website live, Twitter active</p>
+                            <p style="margin-top: 0.5rem;"><strong>Phase 2: "The First Steps"</strong> 🔄</p>
+                            <p style="color: var(--text-secondary);">Add liquidity, enable trading, first 1,000 holders</p>
+                            <p style="margin-top: 0.5rem;"><strong>Phase 3: "Into the Wasteland"</strong></p>
+                            <p style="color: var(--text-secondary);">CoinGecko, CMC, partnerships, 10,000 holders</p>
+                            <p style="margin-top: 0.5rem;"><strong>Phase 4: "The Mountains"</strong></p>
+                            <p style="color: var(--text-secondary);">Major listings, charity donations, global recognition</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <a href="index.html#roadmap" class="read-more">Full Roadmap <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="newsletter-section">
+                <h2>🐧 Stay Deranged</h2>
+                <p>Subscribe to get the latest news, updates, and existential penguin philosophy delivered to your inbox.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Newsletter coming soon! Follow us on Twitter for now.');">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    Or follow us on <a href="https://x.com/DERANGEDCOIN" target="_blank" style="color: var(--primary);">Twitter/X @DERANGEDCOIN</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <span class="logo-icon">🐧</span>
+                        <span class="logo-text">$DERANGED</span>
+                    </a>
+                    <p class="footer-tagline">"Some walk to the sea. Some walk to the colony. We walk to the mountains."</p>
+                    <div class="footer-socials">
+                        <a href="https://x.com/DERANGEDCOIN" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="whitepaper.html">Whitepaper</a></li>
+                            <li><a href="audit.html">Audit Report</a></li>
+                            <li><a href="brandkit.html">Brand Kit</a></li>
+                            <li><a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">Contract ↗</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Trade</h4>
+                        <ul>
+                            <li><a href="https://aerodrome.finance/swap?to=0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">Aerodrome ↗</a></li>
+                            <li><a href="https://basescan.org/token/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">BaseScan ↗</a></li>
+                            <li><a href="https://dexscreener.com/base/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">DexScreener ↗</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://x.com/DERANGEDCOIN" target="_blank">Twitter/X ↗</a></li>
+                            <li><a href="#">Telegram</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 $DERANGED. All rights reserved. Not affiliated with Werner Herzog or Discovery Films.</p>
+                <p class="disclaimer">$DERANGED is a meme coin with no intrinsic value or expectation of financial return.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

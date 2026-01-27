@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$DERANGED - The Deranged Penguin | Meme Coin</title>
+    <meta name="description" content="The most philosophical meme coin in crypto. Inspired by Werner Herzog's legendary penguin that walked toward the mountains.">
+    <meta property="og:title" content="$DERANGED - The Deranged Penguin">
+    <meta property="og:description" content="Some walk to the sea. Some walk to the colony. We walk to the mountains.">
+    <meta property="og:image" content="assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Ethers.js for blockchain interaction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🐧</span>
+                <span class="logo-text">$DERANGED</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#story">Story</a></li>
+                <li><a href="#tokenomics">Tokenomics</a></li>
+                <li><a href="#charity">🐧 Charity</a></li>
+                <li><a href="#airdrop">🎁 Airdrop</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#how-to-buy">How to Buy</a></li>
+                <li><a href="whitepaper.html">📄 Whitepaper</a></li>
+                <li><a href="blog.html">📰 Blog</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-outline" id="connectWallet">
+                    <i class="fas fa-wallet"></i> Connect
+                </a>
+                <a href="#how-to-buy" class="btn btn-primary">Buy Now</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                🔥 Now Live on Blockchain
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">THE</span>
+                <span class="title-main glitch" data-text="DERANGED">DERANGED</span>
+                <span class="title-line">PENGUIN</span>
+            </h1>
+            <p class="hero-subtitle">
+                "Even if he were to be caught and brought back to the colony, 
+                he would immediately head right back for the mountains."
+            </p>
+            <p class="hero-author">— Werner Herzog, 2007</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value" data-target="1000000000">0</span>
+                    <span class="stat-label">Total Supply</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="holdersCount">0</span>
+                    <span class="stat-label">Holders</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">4/5%</span>
+                    <span class="stat-label">Buy/Sell Tax</span>
+                </div>
+                <div class="stat highlight-stat">
+                    <span class="stat-value">🐧 2%</span>
+                    <span class="stat-label">To Charity</span>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#how-to-buy" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i> Buy $DERANGED
+                </a>
+                <a href="#story" class="btn btn-outline btn-lg">
+                    <i class="fas fa-book"></i> Read the Story
+                </a>
+            </div>
+
+            <div class="contract-address">
+                <span class="label">Contract Address (Base):</span>
+                <div class="address-box">
+                    <code id="contractAddress">0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9</code>
+                    <button class="copy-btn" onclick="copyContract()">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="basescan-link" title="View on BaseScan">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="penguin-container">
+                <div class="penguin-silhouette">
+                    <svg viewBox="0 0 200 300" class="penguin-svg">
+                        <!-- Penguin silhouette -->
+                        <ellipse cx="100" cy="220" rx="45" ry="70" fill="currentColor"/>
+                        <circle cx="100" cy="130" r="35" fill="currentColor"/>
+                        <ellipse cx="65" cy="200" rx="15" ry="40" fill="currentColor"/>
+                        <ellipse cx="135" cy="200" rx="15" ry="40" fill="currentColor"/>
+                        <ellipse cx="85" cy="280" rx="12" ry="8" fill="currentColor"/>
+                        <ellipse cx="115" cy="280" rx="12" ry="8" fill="currentColor"/>
+                        <circle cx="90" cy="125" r="4" fill="#1a1a2e"/>
+                        <circle cx="110" cy="125" r="4" fill="#1a1a2e"/>
+                        <path d="M95 140 L100 150 L105 140" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                    </svg>
+                </div>
+                <div class="mountains">
+                    <svg viewBox="0 0 800 200" class="mountains-svg">
+                        <polygon points="0,200 150,50 300,200" fill="#2a2a4a"/>
+                        <polygon points="200,200 400,20 600,200" fill="#1a1a3a"/>
+                        <polygon points="500,200 700,60 800,200" fill="#2a2a4a"/>
+                        <polygon points="100,200 250,80 400,200" fill="#3a3a5a"/>
+                    </svg>
+                </div>
+                <div class="snow-ground"></div>
+                <div class="distance-marker">70 km →</div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Ticker -->
+    <div class="ticker">
+        <div class="ticker-content">
+            <span>🐧 $DERANGED</span>
+            <span>🏔️ WALK TO THE MOUNTAINS</span>
+            <span>💎 DIAMOND HANDS</span>
+            <span>🚀 TO THE MOON</span>
+            <span>❄️ ANTARCTIC VIBES</span>
+            <span>🐧 $DERANGED</span>
+            <span>🏔️ WALK TO THE MOUNTAINS</span>
+            <span>💎 DIAMOND HANDS</span>
+            <span>🚀 TO THE MOON</span>
+            <span>❄️ ANTARCTIC VIBES</span>
+        </div>
+    </div>
+
+    <!-- Story Section -->
+    <section class="story" id="story">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Legend</span>
+                <h2 class="section-title">The Story of the <span class="highlight">Deranged Penguin</span></h2>
+            </div>
+
+            <div class="story-content">
+                <div class="story-video">
+                    <div class="video-wrapper">
+                        <!-- Video autoplay (muted for browser compliance) -->
+                        <div class="video-iframe-container" id="videoContainer">
+                            <iframe 
+                                id="youtubePlayer"
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube-nocookie.com/embed/zWH_9VRWn8Y?autoplay=1&mute=1&loop=1&playlist=zWH_9VRWn8Y&rel=0&modestbranding=1" 
+                                title="Werner Herzog - Deranged Penguin" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <!-- Botón para activar sonido -->
+                        <button class="unmute-btn" id="unmuteBtn" onclick="unmuteVideo()">
+                            <i class="fas fa-volume-mute"></i>
+                            <span>Click for sound</span>
+                        </button>
+                    </div>
+                    <p class="video-caption">From "Encounters at the End of the World" (2007) by Werner Herzog</p>
+                    <div class="video-warning">
+                        <i class="fas fa-info-circle"></i>
+                        <span>This clip is for educational purposes. All rights belong to Discovery Films.</span>
+                    </div>
+                </div>
+
+                <div class="story-text">
+                    <div class="story-chapter">
+                        <span class="chapter-number">01</span>
+                        <h3>Antarctica, 2007</h3>
+                        <p>Legendary filmmaker Werner Herzog traveled to the frozen continent at the end of the world. He didn't come to film "fluffy penguins" — he came to explore the dreams of those who live at the edge of existence.</p>
+                    </div>
+
+                    <div class="story-chapter">
+                        <span class="chapter-number">02</span>
+                        <h3>The Question</h3>
+                        <p>Herzog asked penguin scientist Dr. David Ainley a question no one had asked before: <em>"Do penguins go insane?"</em></p>
+                    </div>
+
+                    <div class="story-chapter">
+                        <span class="chapter-number">03</span>
+                        <h3>The Departure</h3>
+                        <p>Among thousands of penguins heading to the sea to feed, one stopped. He looked at the ocean. He looked at his colony. Then, defying every survival instinct, he turned and walked alone toward the mountains — <strong>70 kilometers of certain death</strong>.</p>
+                    </div>
+
+                    <div class="story-chapter">
+                        <span class="chapter-number">04</span>
+                        <h3>The Legend</h3>
+                        <p>Herzog narrated: <em>"Even if he were to be caught and brought back to the colony, he would immediately head right back for the mountains."</em></p>
+                        <p>This penguin became a symbol of existential rebellion — choosing your own path, even when it leads to oblivion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="philosophy-cards">
+                <div class="philosophy-card">
+                    <div class="card-icon">🖤</div>
+                    <h4>Nihilism</h4>
+                    <p>The absurdity of existence in an indifferent universe</p>
+                </div>
+                <div class="philosophy-card">
+                    <div class="card-icon">🔥</div>
+                    <h4>Rebellion</h4>
+                    <p>Rejecting the system, the colony, the "normal" path</p>
+                </div>
+                <div class="philosophy-card">
+                    <div class="card-icon">💎</div>
+                    <h4>Conviction</h4>
+                    <p>Never turning back, no matter what lies ahead</p>
+                </div>
+                <div class="philosophy-card">
+                    <div class="card-icon">🌌</div>
+                    <h4>Freedom</h4>
+                    <p>Choosing your own destiny, even unto death</p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <blockquote>
+                    "In crypto, we are all deranged penguins. We reject traditional finance. We walk toward our own mountains. They call us crazy. We call it freedom."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section class="tokenomics" id="tokenomics">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Economics</span>
+                <h2 class="section-title">Tokenomics</h2>
+                <p class="section-subtitle">Simple. Fair. Deranged.</p>
+            </div>
+
+            <div class="tokenomics-grid">
+                <div class="tokenomics-main">
+                    <div class="token-chart">
+                        <div class="chart-container">
+                            <canvas id="tokenChart"></canvas>
+                            <div class="chart-center">
+                                <span class="chart-total">1B</span>
+                                <span class="chart-label">Total Supply</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="distribution-list">
+                        <div class="distribution-item">
+                            <div class="item-color" style="background: #4ECDC4;"></div>
+                            <div class="item-info">
+                                <span class="item-label">Liquidity Pool</span>
+                                <span class="item-value">90%</span>
+                            </div>
+                            <div class="item-bar">
+                                <div class="bar-fill" style="width: 90%; background: #4ECDC4;"></div>
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="item-color" style="background: #FF6B6B;"></div>
+                            <div class="item-info">
+                                <span class="item-label">Team & Development</span>
+                                <span class="item-value">5%</span>
+                            </div>
+                            <div class="item-bar">
+                                <div class="bar-fill" style="width: 5%; background: #FF6B6B;"></div>
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="item-color" style="background: #45B7D1;"></div>
+                            <div class="item-info">
+                                <span class="item-label">Airdrops & Rewards</span>
+                                <span class="item-value">3%</span>
+                            </div>
+                            <div class="item-bar">
+                                <div class="bar-fill" style="width: 3%; background: #45B7D1;"></div>
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="item-color" style="background: #96CEB4;"></div>
+                            <div class="item-info">
+                                <span class="item-label">Partnerships & CEX</span>
+                                <span class="item-value">2%</span>
+                            </div>
+                            <div class="item-bar">
+                                <div class="bar-fill" style="width: 2%; background: #96CEB4;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tokenomics-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h4>4% Buy / 5% Sell</h4>
+                        <p>2-3% burned forever + 2% to penguin conservation 🐧</p>
+                    </div>
+                    <div class="feature-card charity-highlight">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>🐧 2% Charity</h4>
+                        <p>Every trade helps protect real penguins worldwide!</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>LP Locked</h4>
+                        <p>100% of liquidity locked forever. No rug pulls.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Audited</h4>
+                        <p>Smart contract audited by leading security firms.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="token-info-boxes">
+                <div class="info-box">
+                    <span class="info-label">Token Name</span>
+                    <span class="info-value">Deranged Penguin</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Symbol</span>
+                    <span class="info-value">$DERANGED</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Network</span>
+                    <span class="info-value">Base (L2)</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Decimals</span>
+                    <span class="info-value">18</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charity Section -->
+    <section class="charity" id="charity">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🐧 Making a Difference</span>
+                <h2 class="section-title">Protecting <span class="highlight">Real Penguins</span></h2>
+                <p class="section-subtitle">2% of every transaction goes directly to penguin conservation</p>
+            </div>
+
+            <div class="charity-content">
+                <div class="charity-stats">
+                    <div class="charity-stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-number" id="totalDonated">$0</div>
+                        <div class="stat-label">Total Donated</div>
+                    </div>
+                    <div class="charity-stat-card">
+                        <div class="stat-icon">🐧</div>
+                        <div class="stat-number" id="penguinsHelped">0</div>
+                        <div class="stat-label">Penguins Helped*</div>
+                    </div>
+                    <div class="charity-stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-number">2%</div>
+                        <div class="stat-label">Every Trade</div>
+                    </div>
+                </div>
+
+                <div class="charity-info">
+                    <div class="charity-card main-card">
+                        <div class="card-header">
+                            <span class="card-icon">❤️</span>
+                            <h3>Why We Donate</h3>
+                        </div>
+                        <p>Our deranged penguin walked toward the mountains alone. In his honor, we protect the penguins who stayed behind. Climate change, habitat loss, and declining fish populations threaten penguin species worldwide.</p>
+                        <p><strong>Every buy. Every sell. Every trade helps.</strong></p>
+                    </div>
+
+                    <div class="charity-organizations">
+                        <h4>🌍 Partner Organizations</h4>
+                        <div class="org-list">
+                            <a href="https://globalpenguinsociety.org" target="_blank" class="org-item">
+                                <span class="org-icon">🌊</span>
+                                <span class="org-name">Global Penguin Society</span>
+                                <span class="org-arrow">→</span>
+                            </a>
+                            <a href="https://penguinfoundation.org.au" target="_blank" class="org-item">
+                                <span class="org-icon">🇦🇺</span>
+                                <span class="org-name">Penguin Foundation Australia</span>
+                                <span class="org-arrow">→</span>
+                            </a>
+                            <a href="https://www.asoc.org" target="_blank" class="org-item">
+                                <span class="org-icon">🌍</span>
+                                <span class="org-name">Antarctic & Southern Ocean Coalition</span>
+                                <span class="org-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="charity-transparency">
+                        <h4>🔍 Full Transparency</h4>
+                        <ul>
+                            <li>✅ All donations tracked on-chain</li>
+                            <li>✅ Donation receipts published monthly</li>
+                            <li>✅ Community votes on which organizations receive funds</li>
+                            <li>✅ Charity wallet publicly visible</li>
+                        </ul>
+                        <div class="wallet-display">
+                            <span class="wallet-label">Charity Wallet:</span>
+                            <code class="wallet-address" id="charityWallet">Will be displayed after launch</code>
+                            <button class="copy-btn" onclick="copyCharityWallet()">📋</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charity-cta">
+                    <p class="cta-text">🐧 Be part of the change. Trade $DERANGED. Save penguins.</p>
+                </div>
+            </div>
+
+            <p class="charity-disclaimer">*Estimated based on average conservation cost per penguin ($50). Actual impact varies by organization and program.</p>
+        </div>
+    </section>
+
+    <!-- Airdrop Section -->
+    <section class="airdrop" id="airdrop">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Free Tokens</span>
+                <h2 class="section-title">🎁 <span class="highlight">Airdrop</span></h2>
+                <p class="section-subtitle">Get free $DERANGED tokens by completing simple tasks!</p>
+            </div>
+
+            <div class="airdrop-content">
+                <div class="airdrop-info">
+                    <div class="airdrop-pool">
+                        <span class="pool-label">Airdrop Pool</span>
+                        <span class="pool-amount">30,000,000</span>
+                        <span class="pool-token">$DERANGED</span>
+                        <span class="pool-percent">(3% of Total Supply)</span>
+                    </div>
+                    
+                    <div class="airdrop-status">
+                        <div class="status-badge live">
+                            <span class="pulse"></span>
+                            Campaign Active
+                        </div>
+                    </div>
+                </div>
+
+                <div class="airdrop-tasks">
+                    <h3>📋 How to Participate</h3>
+                    <div class="tasks-grid">
+                        <div class="task-card">
+                            <div class="task-icon">𝕏</div>
+                            <h4>Follow on X</h4>
+                            <p>Follow <a href="https://x.com/DERANGEDCOIN" target="_blank">@DERANGEDCOIN</a></p>
+                            <span class="task-points">+100 pts</span>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-icon">🔄</div>
+                            <h4>Retweet</h4>
+                            <p>Retweet our pinned tweet</p>
+                            <span class="task-points">+150 pts</span>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-icon">💬</div>
+                            <h4>Join Telegram</h4>
+                            <p>Join our community chat</p>
+                            <span class="task-points">+100 pts</span>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-icon">🧠</div>
+                            <h4>Quiz</h4>
+                            <p>Complete the $DERANGED quiz</p>
+                            <span class="task-points">+200 pts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="airdrop-cta">
+                    <a href="#" class="btn btn-primary btn-lg airdrop-btn" id="airdropBtn">
+                        <i class="fas fa-gift"></i> Join Airdrop on Galxe
+                    </a>
+                    <p class="airdrop-note">Campaign will open at launch. Follow us to get notified!</p>
+                </div>
+
+                <div class="airdrop-distribution">
+                    <h3>📊 Airdrop Distribution</h3>
+                    <div class="distribution-grid">
+                        <div class="distribution-item">
+                            <span class="dist-amount">10M</span>
+                            <span class="dist-label">Early Supporters</span>
+                            <span class="dist-timing">Week 1</span>
+                        </div>
+                        <div class="distribution-item">
+                            <span class="dist-amount">10M</span>
+                            <span class="dist-label">Holder Rewards</span>
+                            <span class="dist-timing">Week 2-4</span>
+                        </div>
+                        <div class="distribution-item">
+                            <span class="dist-amount">5M</span>
+                            <span class="dist-label">Meme Contests</span>
+                            <span class="dist-timing">Ongoing</span>
+                        </div>
+                        <div class="distribution-item">
+                            <span class="dist-amount">5M</span>
+                            <span class="dist-label">Influencers</span>
+                            <span class="dist-timing">Ongoing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap" id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Journey</span>
+                <h2 class="section-title">Roadmap: <span class="highlight">The 70km Walk</span></h2>
+                <p class="section-subtitle">Just like our penguin's journey, we have a long road ahead.</p>
+            </div>
+
+            <div class="roadmap-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="roadmap-phase phase-1 active">
+                    <div class="phase-marker">
+                        <span class="phase-icon">🐧</span>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 1</span>
+                            <h3>Leaving the Colony</h3>
+                            <span class="phase-distance">0-10 km</span>
+                        </div>
+                        <ul class="phase-tasks">
+                            <li class="completed"><i class="fas fa-check"></i> Concept & Lore Development</li>
+                            <li class="completed"><i class="fas fa-check"></i> Website Launch</li>
+                            <li class="completed"><i class="fas fa-check"></i> Social Media Setup</li>
+                            <li><i class="fas fa-circle"></i> Smart Contract Development</li>
+                            <li><i class="fas fa-circle"></i> Security Audit</li>
+                            <li><i class="fas fa-circle"></i> Community Building</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="roadmap-phase phase-2">
+                    <div class="phase-marker">
+                        <span class="phase-icon">🚶</span>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 2</span>
+                            <h3>The First Steps</h3>
+                            <span class="phase-distance">10-25 km</span>
+                        </div>
+                        <ul class="phase-tasks">
+                            <li><i class="fas fa-circle"></i> Fair Launch</li>
+                            <li><i class="fas fa-circle"></i> Liquidity Lock (100%)</li>
+                            <li><i class="fas fa-circle"></i> Contract Renouncement</li>
+                            <li><i class="fas fa-circle"></i> CoinGecko Listing</li>
+                            <li><i class="fas fa-circle"></i> CoinMarketCap Listing</li>
+                            <li><i class="fas fa-circle"></i> First 1,000 Holders</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="roadmap-phase phase-3">
+                    <div class="phase-marker">
+                        <span class="phase-icon">❄️</span>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 3</span>
+                            <h3>Into the Wasteland</h3>
+                            <span class="phase-distance">25-50 km</span>
+                        </div>
+                        <ul class="phase-tasks">
+                            <li><i class="fas fa-circle"></i> DEX Trending</li>
+                            <li><i class="fas fa-circle"></i> Influencer Partnerships</li>
+                            <li><i class="fas fa-circle"></i> NFT Collection Launch</li>
+                            <li><i class="fas fa-circle"></i> CEX Listings</li>
+                            <li><i class="fas fa-circle"></i> 10,000 Holders</li>
+                            <li><i class="fas fa-circle"></i> Viral Marketing Campaign</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="roadmap-phase phase-4">
+                    <div class="phase-marker">
+                        <span class="phase-icon">⛰️</span>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 4</span>
+                            <h3>The Mountains</h3>
+                            <span class="phase-distance">50-70 km</span>
+                        </div>
+                        <ul class="phase-tasks">
+                            <li><i class="fas fa-circle"></i> Major CEX Listings</li>
+                            <li><i class="fas fa-circle"></i> Global Recognition</li>
+                            <li><i class="fas fa-circle"></i> Werner Herzog Acknowledgment</li>
+                            <li><i class="fas fa-circle"></i> 100,000 Holders</li>
+                            <li><i class="fas fa-circle"></i> Penguin Conservation Fund</li>
+                            <li><i class="fas fa-circle"></i> Documentary Partnership</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section class="how-to-buy" id="how-to-buy">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Get Started</span>
+                <h2 class="section-title">How to Buy <span class="highlight">$DERANGED</span></h2>
+                <p class="section-subtitle">Join the walk toward the mountains in 4 simple steps</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Create a Wallet</h3>
+                    <p>Download MetaMask or your preferred wallet. Create a new wallet and securely store your recovery phrase.</p>
+                    <a href="https://metamask.io" target="_blank" class="step-link">Get MetaMask <i class="fas fa-external-link-alt"></i></a>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Get ETH on Base</h3>
+                    <p>Buy ETH and bridge to Base network. Or buy directly on Base via Coinbase.</p>
+                    <a href="https://bridge.base.org" target="_blank" class="step-link">Bridge to Base <i class="fas fa-external-link-alt"></i></a>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Go to Aerodrome</h3>
+                    <p>Connect your wallet to Aerodrome (Base DEX). Paste the $DERANGED contract address to find the token.</p>
+                    <a href="https://aerodrome.finance/swap?to=0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="step-link">Open Aerodrome <i class="fas fa-external-link-alt"></i></a>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Swap for $DERANGED</h3>
+                    <p>Enter the amount of ETH you want to swap. Confirm the transaction and welcome to the colony!</p>
+                    <a href="#" class="step-link">Start Walking <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="buy-buttons">
+                <a href="https://aerodrome.finance/swap?to=0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="btn btn-primary btn-lg">
+                    🛫 Buy on Aerodrome
+                </a>
+                <a href="https://dexscreener.com/base/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-chart-line"></i>
+                    View Chart
+                </a>
+                <a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank" class="btn btn-outline btn-lg">
+                    <i class="fas fa-search"></i>
+                    BaseScan
+                </a>
+            </div>
+
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p><strong>Important:</strong> Always verify the contract address before swapping. Never share your private keys or recovery phrase with anyone.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="community" id="community">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Join Us</span>
+                <h2 class="section-title">Join the <span class="highlight">Deranged Colony</span></h2>
+                <p class="section-subtitle">We're not just investors. We're the ones who see differently.</p>
+            </div>
+
+            <div class="social-grid">
+                <a href="https://x.com/DERANGEDCOIN" target="_blank" class="social-card twitter">
+                    <div class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <h3>Twitter</h3>
+                    <p>Follow for memes, updates, and philosophical penguin content</p>
+                    <span class="social-handle">@DerangedPenguin</span>
+                </a>
+
+                <a href="#" class="social-card telegram">
+                    <div class="social-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3>Telegram</h3>
+                    <p>Join our community of deranged individuals</p>
+                    <span class="social-handle">t.me/DerangedPenguin</span>
+                </a>
+
+                <a href="#" class="social-card discord">
+                    <div class="social-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Discord</h3>
+                    <p>Deep discussions and community events</p>
+                    <span class="social-handle">Coming Soon</span>
+                </a>
+
+                <a href="#" class="social-card dextools">
+                    <div class="social-icon">
+                        <i class="fas fa-chart-area"></i>
+                    </div>
+                    <h3>DexTools</h3>
+                    <p>Track price, volume, and transactions</p>
+                    <span class="social-handle">View Chart</span>
+                </a>
+            </div>
+
+            <div class="community-stats">
+                <div class="community-stat">
+                    <span class="stat-number" data-target="0">0</span>
+                    <span class="stat-text">Holders</span>
+                </div>
+                <div class="community-stat">
+                    <span class="stat-number" data-target="0">0</span>
+                    <span class="stat-text">Twitter Followers</span>
+                </div>
+                <div class="community-stat">
+                    <span class="stat-number" data-target="0">0</span>
+                    <span class="stat-text">Telegram Members</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Questions</span>
+                <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+            </div>
+
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is $DERANGED?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>$DERANGED is a meme coin inspired by the legendary "deranged penguin" from Werner Herzog's 2007 documentary "Encounters at the End of the World". It represents the spirit of choosing your own path, even when everyone thinks you're crazy.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is the contract safe?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! The contract has been audited, liquidity is locked forever, and ownership has been renounced. There's no way to rug pull or modify the contract. Always DYOR (Do Your Own Research).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What blockchain is $DERANGED on?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>$DERANGED is deployed on Ethereum/Base network. You can buy it using ETH on Uniswap or other decentralized exchanges.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is there a buy/sell tax?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No! $DERANGED has 0% buy tax and 0% sell tax. What you see is what you get. Pure, free trading just like our penguin walking freely toward the mountains.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Who created the penguin story?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>The story comes from the documentary "Encounters at the End of the World" (2007) directed by Werner Herzog. The scene went viral in 2026 as a meme representing nihilism, isolation, and the absurdity of existence.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How can I join the community?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Join our Twitter, Telegram, and Discord communities! We welcome all deranged individuals who choose their own path. Links are available in the Community section above.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners">
+        <div class="container">
+            <h3 class="partners-title">As Seen On</h3>
+            <div class="partners-grid">
+                <div class="partner-logo">
+                    <img src="https://cryptologos.cc/logos/uniswap-uni-logo.png" alt="Uniswap">
+                </div>
+                <div class="partner-logo">
+                    <span>CoinGecko</span>
+                </div>
+                <div class="partner-logo">
+                    <span>CoinMarketCap</span>
+                </div>
+                <div class="partner-logo">
+                    <span>DexTools</span>
+                </div>
+                <div class="partner-logo">
+                    <span>Etherscan</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="footer-logo">
+                        <span class="logo-icon">🐧</span>
+                        <span class="logo-text">$DERANGED</span>
+                    </a>
+                    <p class="footer-tagline">"Some walk to the sea. Some walk to the colony. We walk to the mountains."</p>
+                    <div class="footer-socials">
+                        <a href="https://x.com/DERANGEDCOIN" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-medium"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#story">Story</a></li>
+                            <li><a href="#tokenomics">Tokenomics</a></li>
+                            <li><a href="#roadmap">Roadmap</a></li>
+                            <li><a href="#how-to-buy">How to Buy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="whitepaper.html">Whitepaper</a></li>
+                            <li><a href="audit.html">Audit Report</a></li>
+                            <li><a href="brandkit.html">Brand Kit</a></li>
+                            <li><a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">Contract ↗</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Trade</h4>
+                        <ul>
+                            <li><a href="https://aerodrome.finance/swap?to=0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">Aerodrome ↗</a></li>
+                            <li><a href="https://basescan.org/token/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">BaseScan ↗</a></li>
+                            <li><a href="https://dexscreener.com/base/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">DexScreener ↗</a></li>
+                            <li><a href="https://bridge.base.org" target="_blank">Bridge to Base ↗</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://x.com/DERANGEDCOIN" target="_blank">Twitter/X ↗</a></li>
+                            <li><a href="#">Telegram</a></li>
+                            <li><a href="#">Discord</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 $DERANGED. All rights reserved. Not affiliated with Werner Herzog or Discovery Films.</p>
+                <p class="disclaimer">$DERANGED is a meme coin with no intrinsic value or expectation of financial return. Cryptocurrency investments are risky. Never invest more than you can afford to lose.</p>
+            </div>
+        </div>
+
+        <div class="footer-penguin">
+            <div class="walking-penguin">🐧</div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

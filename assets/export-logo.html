@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export $DERANGED Logo to PNG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0f;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #4ECDC4;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .preview-item {
+            background: #12121a;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .preview-item h3 {
+            margin-bottom: 15px;
+            color: #4ECDC4;
+        }
+        .preview-item canvas {
+            background: #0a0a0f;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .preview-item p {
+            color: #888;
+            font-size: 0.875rem;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #4ECDC4;
+            color: #0a0a0f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+        }
+        .info {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(78, 205, 196, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #4ECDC4;
+            max-width: 600px;
+        }
+        .info h4 {
+            margin-bottom: 10px;
+        }
+        .info ul {
+            margin-left: 20px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐧 Export $DERANGED Logo</h1>
+    
+    <div class="preview-grid">
+        <div class="preview-item">
+            <h3>Profile Picture</h3>
+            <canvas id="canvas400" width="400" height="400"></canvas>
+            <p>400x400px - X/Twitter Profile</p>
+            <button onclick="downloadPNG('canvas400', 'deranged-logo-400.png')">Download PNG</button>
+        </div>
+        
+        <div class="preview-item">
+            <h3>High Resolution</h3>
+            <canvas id="canvas1024" width="200" height="200" style="width: 200px; height: 200px;"></canvas>
+            <p>1024x1024px - High Quality</p>
+            <button onclick="downloadPNG('canvas1024', 'deranged-logo-1024.png')">Download PNG</button>
+        </div>
+        
+        <div class="preview-item">
+            <h3>Favicon Size</h3>
+            <canvas id="canvas128" width="128" height="128"></canvas>
+            <p>128x128px - Small Icon</p>
+            <button onclick="downloadPNG('canvas128', 'deranged-logo-128.png')">Download PNG</button>
+        </div>
+        
+        <div class="preview-item">
+            <h3>Banner Preview</h3>
+            <canvas id="canvasBanner" width="300" height="100" style="border-radius: 8px;"></canvas>
+            <p>1500x500px - X/Twitter Banner</p>
+            <button onclick="downloadPNG('canvasBanner', 'deranged-banner-1500x500.png')">Download PNG</button>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h4>📌 Tamaños Recomendados para X (Twitter):</h4>
+        <ul>
+            <li><strong>Foto de perfil:</strong> 400x400px (se muestra como círculo)</li>
+            <li><strong>Banner:</strong> 1500x500px</li>
+            <li><strong>Posts con imagen:</strong> 1200x675px o 1080x1080px</li>
+        </ul>
+    </div>
+
+    <script>
+        // SVG del logo
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="250" fill="#1a1a2e"/>
+  <circle cx="256" cy="256" r="230" fill="#0f0f1a" stroke="#4ECDC4" stroke-width="3"/>
+  <polygon points="100,380 180,280 260,380" fill="#2a2a4e"/>
+  <polygon points="200,380 300,250 400,380" fill="#3a3a5e"/>
+  <polygon points="320,380 420,300 480,380" fill="#2a2a4e"/>
+  <polygon points="180,280 160,310 200,310" fill="#ffffff" opacity="0.3"/>
+  <polygon points="300,250 270,290 330,290" fill="#ffffff" opacity="0.3"/>
+  <ellipse cx="256" cy="400" rx="200" ry="30" fill="#4ECDC4" opacity="0.2"/>
+  <ellipse cx="256" cy="340" rx="45" ry="60" fill="#1a1a2e"/>
+  <ellipse cx="256" cy="345" rx="30" ry="45" fill="#ffffff"/>
+  <circle cx="256" cy="270" r="35" fill="#1a1a2e"/>
+  <ellipse cx="256" cy="275" rx="20" ry="22" fill="#ffffff"/>
+  <circle cx="265" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="267" cy="263" r="2" fill="#4ECDC4"/>
+  <circle cx="248" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="250" cy="263" r="2" fill="#4ECDC4"/>
+  <polygon points="256,275 270,285 256,290 242,285" fill="#e74c3c"/>
+  <ellipse cx="210" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(-15 210 330)"/>
+  <ellipse cx="302" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(15 302 330)"/>
+  <ellipse cx="240" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+  <ellipse cx="272" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+  <ellipse cx="300" cy="385" rx="5" ry="3" fill="#4ECDC4" opacity="0.4"/>
+  <ellipse cx="330" cy="375" rx="5" ry="3" fill="#4ECDC4" opacity="0.3"/>
+  <ellipse cx="365" cy="360" rx="4" ry="2" fill="#4ECDC4" opacity="0.2"/>
+  <text x="256" y="470" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#4ECDC4">$DERANGED</text>
+</svg>`;
+
+        // Banner SVG
+        const bannerSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500">
+  <rect width="1500" height="500" fill="#0a0a0f"/>
+  
+  <!-- Mountains background -->
+  <polygon points="0,500 200,200 400,500" fill="#1a1a2e"/>
+  <polygon points="300,500 550,150 800,500" fill="#2a2a4e"/>
+  <polygon points="700,500 950,180 1200,500" fill="#1a1a2e"/>
+  <polygon points="1100,500 1350,220 1500,500" fill="#2a2a4e"/>
+  
+  <!-- Snow caps -->
+  <polygon points="550,150 500,220 600,220" fill="#ffffff" opacity="0.2"/>
+  <polygon points="950,180 900,250 1000,250" fill="#ffffff" opacity="0.2"/>
+  
+  <!-- Aurora effect -->
+  <ellipse cx="750" cy="100" rx="600" ry="80" fill="#4ECDC4" opacity="0.1"/>
+  <ellipse cx="600" cy="80" rx="400" ry="50" fill="#45B7D1" opacity="0.1"/>
+  
+  <!-- Ground ice -->
+  <rect x="0" y="450" width="1500" height="50" fill="#4ECDC4" opacity="0.1"/>
+  
+  <!-- Penguin silhouette walking -->
+  <g transform="translate(200, 320) scale(0.6)">
+    <ellipse cx="0" cy="60" rx="35" ry="50" fill="#1a1a2e"/>
+    <circle cx="0" cy="0" r="28" fill="#1a1a2e"/>
+    <ellipse cx="-25" cy="50" rx="8" ry="25" fill="#1a1a2e" transform="rotate(-10 -25 50)"/>
+    <ellipse cx="25" cy="50" rx="8" ry="25" fill="#1a1a2e" transform="rotate(10 25 50)"/>
+  </g>
+  
+  <!-- Main text -->
+  <text x="750" y="270" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="120" font-weight="900" fill="#4ECDC4">$DERANGED</text>
+  
+  <!-- Tagline -->
+  <text x="750" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" fill="#ffffff" opacity="0.8">The Deranged Penguin</text>
+  
+  <!-- Quote -->
+  <text x="750" y="420" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#4ECDC4" opacity="0.6" font-style="italic">"We walk to the mountains."</text>
+  
+  <!-- Footprints -->
+  <ellipse cx="280" cy="440" rx="8" ry="4" fill="#4ECDC4" opacity="0.3"/>
+  <ellipse cx="340" cy="430" rx="8" ry="4" fill="#4ECDC4" opacity="0.25"/>
+  <ellipse cx="400" cy="420" rx="7" ry="3" fill="#4ECDC4" opacity="0.2"/>
+  <ellipse cx="460" cy="410" rx="6" ry="3" fill="#4ECDC4" opacity="0.15"/>
+</svg>`;
+
+        function renderSVG(canvasId, svgStr, width, height) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Set actual canvas size for high-res export
+            if (canvasId === 'canvas1024') {
+                canvas.width = 1024;
+                canvas.height = 1024;
+            } else if (canvasId === 'canvasBanner') {
+                canvas.width = 1500;
+                canvas.height = 500;
+            }
+            
+            const img = new Image();
+            const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+
+        function downloadPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Render all on load
+        window.onload = function() {
+            renderSVG('canvas400', svgString, 400, 400);
+            renderSVG('canvas1024', svgString, 1024, 1024);
+            renderSVG('canvas128', svgString, 128, 128);
+            renderSVG('canvasBanner', bannerSvg, 1500, 500);
+        };
+    </script>
+</body>
+</html>

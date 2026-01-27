@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="250" fill="#1a1a2e"/>
+  <circle cx="256" cy="256" r="230" fill="#0f0f1a" stroke="#4ECDC4" stroke-width="3"/>
+  
+  <!-- Mountains in background -->
+  <polygon points="100,380 180,280 260,380" fill="#2a2a4e"/>
+  <polygon points="200,380 300,250 400,380" fill="#3a3a5e"/>
+  <polygon points="320,380 420,300 480,380" fill="#2a2a4e"/>
+  
+  <!-- Snow caps -->
+  <polygon points="180,280 160,310 200,310" fill="#ffffff" opacity="0.3"/>
+  <polygon points="300,250 270,290 330,290" fill="#ffffff" opacity="0.3"/>
+  
+  <!-- Ground/Ice -->
+  <ellipse cx="256" cy="400" rx="200" ry="30" fill="#4ECDC4" opacity="0.2"/>
+  
+  <!-- Penguin Body -->
+  <ellipse cx="256" cy="340" rx="45" ry="60" fill="#1a1a2e"/>
+  
+  <!-- Penguin White Belly -->
+  <ellipse cx="256" cy="345" rx="30" ry="45" fill="#ffffff"/>
+  
+  <!-- Penguin Head -->
+  <circle cx="256" cy="270" r="35" fill="#1a1a2e"/>
+  
+  <!-- Penguin Face (white) -->
+  <ellipse cx="256" cy="275" rx="20" ry="22" fill="#ffffff"/>
+  
+  <!-- Eyes (looking toward mountains - to the right) -->
+  <circle cx="265" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="267" cy="263" r="2" fill="#4ECDC4"/>
+  
+  <circle cx="248" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="250" cy="263" r="2" fill="#4ECDC4"/>
+  
+  <!-- Beak -->
+  <polygon points="256,275 270,285 256,290 242,285" fill="#e74c3c"/>
+  
+  <!-- Wings -->
+  <ellipse cx="210" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(-15 210 330)"/>
+  <ellipse cx="302" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(15 302 330)"/>
+  
+  <!-- Feet -->
+  <ellipse cx="240" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+  <ellipse cx="272" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+  
+  <!-- Footprints going toward mountains -->
+  <ellipse cx="300" cy="385" rx="5" ry="3" fill="#4ECDC4" opacity="0.4"/>
+  <ellipse cx="330" cy="375" rx="5" ry="3" fill="#4ECDC4" opacity="0.3"/>
+  <ellipse cx="360" cy="365" rx="4" ry="2" fill="#4ECDC4" opacity="0.2"/>
+  <ellipse cx="390" cy="355" rx="3" ry="2" fill="#4ECDC4" opacity="0.1"/>
+  
+  <!-- Text Arc: DERANGED -->
+  <path id="textPath" d="M 80,256 A 176,176 0 0,1 432,256" fill="none"/>
+  <text fill="#4ECDC4" font-family="Arial Black, sans-serif" font-size="42" font-weight="bold">
+    <textPath href="#textPath" startOffset="50%" text-anchor="middle">DERANGED</textPath>
+  </text>
+  
+  <!-- Subtle glow effect on penguin -->
+  <circle cx="256" cy="340" r="80" fill="url(#glow)" opacity="0.3"/>
+  
+  <defs>
+    <radialGradient id="glow">
+      <stop offset="0%" stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+</svg>
