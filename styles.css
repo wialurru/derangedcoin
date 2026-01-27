@@ -368,6 +368,29 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-muted);
 }
 
+/* Live indicator animation */
+.live-indicator {
+    color: #00ff88;
+    font-size: 0.6rem;
+    animation: pulse-live 2s ease-in-out infinite;
+    margin-left: 4px;
+}
+
+@keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    margin-left: 6px;
+    animation: pulse-live 2s ease-in-out infinite;
+}
+
 .hero-buttons {
     display: flex;
     gap: 16px;
@@ -897,6 +920,101 @@ section {
     font-style: italic;
     color: var(--text);
     line-height: 1.8;
+}
+
+/* Live Stats Section */
+.live-stats-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, var(--dark) 0%, var(--dark-light) 50%, var(--dark) 100%);
+    position: relative;
+}
+
+.live-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.live-stat-card {
+    background: var(--dark-lighter);
+    border: 1px solid rgba(78, 205, 196, 0.2);
+    border-radius: var(--border-radius);
+    padding: 30px 24px;
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.live-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-1);
+    opacity: 0.5;
+}
+
+.live-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-glow);
+}
+
+.live-stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+
+.live-stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.live-stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.live-stats-footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.live-stats-footer p {
+    margin-bottom: 8px;
+}
+
+.live-stats-footer a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.live-stats-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .live-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .live-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .live-stat-value {
+        font-size: 1.5rem;
+    }
 }
 
 /* Tokenomics Section */

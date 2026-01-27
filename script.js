@@ -9,7 +9,9 @@ const CONTRACT_CONFIG = {
     chainId: 8453, // Base Mainnet
     rpcUrl: "https://mainnet.base.org",
     basescanApi: "https://api.basescan.org/api",
-    basescanApiKey: "", // Optional: get from basescan.org
+    basescanApiKey: "", // Optional: get from basescan.org for higher rate limits
+    // Dead address for burn tracking
+    deadAddress: "0x000000000000000000000000000000000000dEaD",
     // Contract ABI (minimal for reading data)
     abi: [
         "function name() view returns (string)",
@@ -26,6 +28,16 @@ const CONTRACT_CONFIG = {
     ]
 };
 
+// Cache for data to avoid too many requests
+let dataCache = {
+    holders: 0,
+    totalBurned: 0,
+    totalDonated: 0,
+    charityWallet: null,
+    lastUpdate: 0,
+    tokenPrice: 0 // USD price per token
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🐧 DOM loaded, initializing...');
     initParticles();
@@ -36,8 +48,50 @@ document.addEventListener('DOMContentLoaded', function() {
     initCounters();
     initFAQ();
     initScrollAnimations();
-    initContractData(); // NEW: Load contract data
+    initContractData(); // Load contract data
+    initLiveStats(); // Initialize live stats updates
 });
+
+// ==========================================
+// LIVE STATS SYSTEM
+// ==========================================
+function initLiveStats() {
+    // Update stats immediately
+    updateAllStats();
+    
+    // Update every 30 seconds
+    setInterval(updateAllStats, 30000);
+    
+    // Add "live" indicator pulse
+    addLiveIndicators();
+}
+
+function addLiveIndicators() {
+    // Add pulsing dot to indicate live data
+    const statElements = document.querySelectorAll('#holdersCount, #totalDonated, #penguinsHelped, #totalBurned');
+    statElements.forEach(el => {
+        if (!el.querySelector('.live-dot')) {
+            const dot = document.createElement('span');
+            dot.className = 'live-dot';
+            dot.innerHTML = ' <span style="display:inline-block;width:8px;height:8px;background:#00ff88;border-radius:50%;animation:pulse 2s infinite;"></span>';
+            el.appendChild(dot);
+        }
+    });
+}
+
+async function updateAllStats() {
+    console.log('📊 Updating all live stats...');
+    
+    try {
+        // Fetch blockchain data
+        await fetchContractData();
+        
+        // Update last refresh timestamp
+        updateLastRefreshTime();
+    } catch (error) {
+        console.error('❌ Error updating stats:', error);
+    }
+}
 
 // ==========================================
 // CONTRACT DATA FETCHING
@@ -52,9 +106,14 @@ async function initContractData() {
     
     // Load data immediately
     await fetchContractData();
-    
-    // Update every 30 seconds
-    setInterval(fetchContractData, 30000);
+}
+
+function updateLastRefreshTime() {
+    const timeEl = document.getElementById('lastUpdate');
+    if (timeEl) {
+        const now = new Date();
+        timeEl.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+    }
 }
 
 async function fetchContractData() {
@@ -79,34 +138,70 @@ async function fetchWithEthers() {
         provider
     );
     
-    // Fetch all data in parallel
-    const [
-        totalBurned,
-        totalDonated,
-        charityWallet,
-        totalSupply
-    ] = await Promise.all([
-        contract.totalBurned(),
-        contract.totalDonatedToCharity(),
-        contract.charityWallet(),
-        contract.totalSupply()
-    ]);
-    
-    // Get holder count from BaseScan
-    const holders = await fetchHolderCount();
-    
-    // Calculate values
-    const burnedFormatted = parseFloat(ethers.formatEther(totalBurned));
-    const donatedFormatted = parseFloat(ethers.formatEther(totalDonated));
-    
-    // Update UI
-    updateContractUI({
-        totalBurned: burnedFormatted,
-        totalDonated: donatedFormatted,
-        charityWallet: charityWallet,
-        holders: holders,
-        totalSupply: parseFloat(ethers.formatEther(totalSupply))
-    });
+    try {
+        // Fetch all data in parallel
+        const [
+            totalBurned,
+            totalDonated,
+            charityWallet,
+            totalSupply,
+            tradingEnabled
+        ] = await Promise.all([
+            contract.totalBurned(),
+            contract.totalDonatedToCharity(),
+            contract.charityWallet(),
+            contract.totalSupply(),
+            contract.tradingEnabled().catch(() => false)
+        ]);
+        
+        // Get holder count from BaseScan
+        const holders = await fetchHolderCount();
+        
+        // Get token price (try DexScreener API)
+        const tokenPrice = await fetchTokenPrice();
+        
+        // Calculate values
+        const burnedFormatted = parseFloat(ethers.formatEther(totalBurned));
+        const donatedFormatted = parseFloat(ethers.formatEther(totalDonated));
+        const supplyFormatted = parseFloat(ethers.formatEther(totalSupply));
+        
+        // Cache the data
+        dataCache = {
+            holders: holders,
+            totalBurned: burnedFormatted,
+            totalDonated: donatedFormatted,
+            charityWallet: charityWallet,
+            totalSupply: supplyFormatted,
+            tradingEnabled: tradingEnabled,
+            tokenPrice: tokenPrice,
+            lastUpdate: Date.now()
+        };
+        
+        // Update UI
+        updateContractUI(dataCache);
+        
+    } catch (error) {
+        console.error('Error in fetchWithEthers:', error);
+        // Try fallback method
+        await fetchWithBasescan();
+    }
+}
+
+// Fetch token price from DexScreener
+async function fetchTokenPrice() {
+    try {
+        // DexScreener API for Base tokens
+        const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_CONFIG.address}`);
+        const data = await response.json();
+        
+        if (data.pairs && data.pairs.length > 0) {
+            // Get price from the first pair
+            return parseFloat(data.pairs[0].priceUsd) || 0;
+        }
+    } catch (error) {
+        console.log('Price not available yet (token may not be listed)');
+    }
+    return 0;
 }
 
 // Fetch using BaseScan API (fallback)
@@ -134,27 +229,35 @@ async function fetchHolderCount() {
         const address = CONTRACT_CONFIG.address;
         const apiKey = CONTRACT_CONFIG.basescanApiKey;
         
-        // BaseScan token holder count endpoint
-        const url = `${CONTRACT_CONFIG.basescanApi}?module=token&action=tokenholderlist&contractaddress=${address}&page=1&offset=1${apiKey ? '&apikey=' + apiKey : ''}`;
+        // Method 1: Try token holder count from tokentx
+        const txUrl = `${CONTRACT_CONFIG.basescanApi}?module=token&action=tokenholderlist&contractaddress=${address}&page=1&offset=10000${apiKey ? '&apikey=' + apiKey : ''}`;
         
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data.status === '1' && data.result) {
-            // BaseScan returns holder list, we need total count
-            // Alternative: use tokeninfo endpoint
-            const infoUrl = `${CONTRACT_CONFIG.basescanApi}?module=token&action=tokeninfo&contractaddress=${address}${apiKey ? '&apikey=' + apiKey : ''}`;
-            const infoResponse = await fetch(infoUrl);
-            const infoData = await infoResponse.json();
+        try {
+            const response = await fetch(txUrl);
+            const data = await response.json();
             
-            if (infoData.result && infoData.result[0]) {
-                return parseInt(infoData.result[0].holdersCount) || 0;
+            if (data.status === '1' && data.result && Array.isArray(data.result)) {
+                return data.result.length;
             }
+        } catch (e) {
+            console.log('Holder list method failed, trying alternative...');
         }
-        return 0;
+        
+        // Method 2: Try token info endpoint
+        const infoUrl = `${CONTRACT_CONFIG.basescanApi}?module=token&action=tokeninfo&contractaddress=${address}${apiKey ? '&apikey=' + apiKey : ''}`;
+        const infoResponse = await fetch(infoUrl);
+        const infoData = await infoResponse.json();
+        
+        if (infoData.result && infoData.result[0] && infoData.result[0].holdersCount) {
+            return parseInt(infoData.result[0].holdersCount) || 1;
+        }
+        
+        // If contract is deployed but no trades yet, at least deployer holds tokens
+        return 1;
+        
     } catch (error) {
         console.error('Error fetching holders:', error);
-        return 0;
+        return dataCache.holders || 1;
     }
 }
 
@@ -162,25 +265,35 @@ async function fetchHolderCount() {
 function updateContractUI(data) {
     console.log('📊 Updating UI with contract data:', data);
     
-    // Update holders count (if element exists)
+    // Update holders count
     const holdersEl = document.getElementById('holdersCount');
     if (holdersEl && data.holders) {
         animateNumber(holdersEl, data.holders);
     }
     
-    // Update total donated
+    // Calculate USD value of donated tokens
+    let donatedUSD = 0;
+    if (data.totalDonated && data.tokenPrice) {
+        donatedUSD = data.totalDonated * data.tokenPrice;
+    }
+    
+    // Update total donated (in USD)
     const donatedEl = document.getElementById('totalDonated');
-    if (donatedEl && data.totalDonated !== undefined) {
-        // Estimate USD value (you'd need price feed for real value)
-        const estimatedUSD = data.totalDonated * 0.0001; // Placeholder price
-        donatedEl.textContent = `$${formatNumber(estimatedUSD)}`;
+    if (donatedEl) {
+        if (donatedUSD > 0) {
+            donatedEl.textContent = `$${formatUSD(donatedUSD)}`;
+        } else if (data.totalDonated > 0) {
+            // Show in tokens if no price available
+            donatedEl.textContent = `${formatNumber(data.totalDonated)} tokens`;
+        } else {
+            donatedEl.textContent = '$0';
+        }
     }
     
     // Update penguins helped (estimated at $50 per penguin)
     const penguinsEl = document.getElementById('penguinsHelped');
-    if (penguinsEl && data.totalDonated !== undefined) {
-        const estimatedUSD = data.totalDonated * 0.0001;
-        const penguinsHelped = Math.floor(estimatedUSD / 50);
+    if (penguinsEl) {
+        const penguinsHelped = donatedUSD > 0 ? Math.floor(donatedUSD / 50) : 0;
         animateNumber(penguinsEl, penguinsHelped);
     }
     
@@ -192,18 +305,97 @@ function updateContractUI(data) {
     
     // Update burned tokens
     const burnedEl = document.getElementById('totalBurned');
-    if (burnedEl && data.totalBurned) {
+    if (burnedEl && data.totalBurned !== undefined) {
         burnedEl.textContent = formatNumber(data.totalBurned) + ' 🔥';
     }
     
-    // Update circulating supply if needed
-    if (data.totalSupply && data.totalBurned) {
+    // Update circulating supply
+    if (data.totalSupply && data.totalBurned !== undefined) {
         const circulating = data.totalSupply - data.totalBurned;
         const circulatingEl = document.getElementById('circulatingSupply');
         if (circulatingEl) {
             circulatingEl.textContent = formatNumber(circulating);
         }
+        
+        // Update burn percentage
+        const burnPercentEl = document.getElementById('burnPercent');
+        if (burnPercentEl && data.totalSupply > 0) {
+            const burnPercent = (data.totalBurned / data.totalSupply * 100).toFixed(4);
+            burnPercentEl.textContent = `${burnPercent}%`;
+        }
     }
+    
+    // Update trading status indicator
+    const tradingEl = document.getElementById('tradingStatus');
+    if (tradingEl) {
+        if (data.tradingEnabled) {
+            tradingEl.innerHTML = '<span style="color:#00ff88">● LIVE</span>';
+        } else {
+            tradingEl.innerHTML = '<span style="color:#ff6b6b">○ Coming Soon</span>';
+        }
+    }
+    
+    // Update token price if available
+    const priceEl = document.getElementById('tokenPrice');
+    if (priceEl) {
+        if (data.tokenPrice > 0) {
+            priceEl.textContent = `$${data.tokenPrice.toFixed(8)}`;
+        } else {
+            priceEl.textContent = '--';
+        }
+    }
+    
+    // Update market cap if we have price
+    const mcapEl = document.getElementById('marketCap');
+    if (mcapEl && data.tokenPrice > 0 && data.totalSupply) {
+        const mcap = (data.totalSupply - (data.totalBurned || 0)) * data.tokenPrice;
+        mcapEl.textContent = `$${formatUSD(mcap)}`;
+    }
+    
+    // =====================
+    // UPDATE LIVE STATS SECTION (duplicate IDs with "live" prefix)
+    // =====================
+    
+    // Live Holders
+    const liveHoldersEl = document.getElementById('liveHolders');
+    if (liveHoldersEl && data.holders) {
+        animateNumber(liveHoldersEl, data.holders);
+    }
+    
+    // Live Burned
+    const liveBurnedEl = document.getElementById('liveBurned');
+    if (liveBurnedEl && data.totalBurned !== undefined) {
+        liveBurnedEl.textContent = formatNumber(data.totalBurned);
+    }
+    
+    // Live Donated
+    const liveDonatedEl = document.getElementById('liveDonated');
+    if (liveDonatedEl) {
+        if (donatedUSD > 0) {
+            liveDonatedEl.textContent = `$${formatUSD(donatedUSD)}`;
+        } else if (data.totalDonated > 0) {
+            liveDonatedEl.textContent = `${formatNumber(data.totalDonated)} tokens`;
+        } else {
+            liveDonatedEl.textContent = '$0';
+        }
+    }
+    
+    // Live Penguins
+    const livePenguinsEl = document.getElementById('livePenguins');
+    if (livePenguinsEl) {
+        const penguinsCount = donatedUSD > 0 ? Math.floor(donatedUSD / 50) : 0;
+        animateNumber(livePenguinsEl, penguinsCount);
+    }
+}
+
+// Format USD values
+function formatUSD(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(2) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(2) + 'K';
+    }
+    return num.toFixed(2);
 }
 
 // Animate number counting up

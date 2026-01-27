@@ -75,12 +75,12 @@
                     <span class="stat-label">Total Supply</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value" id="holdersCount">0</span>
-                    <span class="stat-label">Holders</span>
+                    <span class="stat-value" id="holdersCount">1</span>
+                    <span class="stat-label">Holders <span class="live-indicator">●</span></span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value">4/5%</span>
-                    <span class="stat-label">Buy/Sell Tax</span>
+                    <span class="stat-value" id="totalBurned">0</span>
+                    <span class="stat-label">Burned 🔥</span>
                 </div>
                 <div class="stat highlight-stat">
                     <span class="stat-value">🐧 2%</span>
@@ -260,6 +260,55 @@
         </div>
     </section>
 
+    <!-- Live Stats Dashboard -->
+    <section class="live-stats-section" id="live-stats">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><span class="live-indicator">●</span> Real-Time Data</span>
+                <h2 class="section-title">Live <span class="highlight">Stats</span></h2>
+                <p class="section-subtitle">On-chain data updating automatically every 30 seconds</p>
+            </div>
+
+            <div class="live-stats-grid">
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">👥</div>
+                    <div class="live-stat-value" id="liveHolders">1</div>
+                    <div class="live-stat-label">Token Holders</div>
+                </div>
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">🔥</div>
+                    <div class="live-stat-value" id="liveBurned">0</div>
+                    <div class="live-stat-label">Tokens Burned</div>
+                </div>
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">💚</div>
+                    <div class="live-stat-value" id="liveDonated">$0</div>
+                    <div class="live-stat-label">Donated to Charity</div>
+                </div>
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">🐧</div>
+                    <div class="live-stat-value" id="livePenguins">0</div>
+                    <div class="live-stat-label">Penguins Protected*</div>
+                </div>
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">📊</div>
+                    <div class="live-stat-value" id="tradingStatus"><span style="color:#ff6b6b">○ Coming Soon</span></div>
+                    <div class="live-stat-label">Trading Status</div>
+                </div>
+                <div class="live-stat-card">
+                    <div class="live-stat-icon">💰</div>
+                    <div class="live-stat-value" id="tokenPrice">--</div>
+                    <div class="live-stat-label">Token Price</div>
+                </div>
+            </div>
+            
+            <div class="live-stats-footer">
+                <p>*Estimated at $50 per penguin for conservation programs</p>
+                <p class="data-source">Data sourced from <a href="https://basescan.org/address/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">BaseScan</a> & <a href="https://dexscreener.com/base/0x56649E9e7aD83bF37a74b8160A699D7A270AE3A9" target="_blank">DexScreener</a></p>
+            </div>
+        </div>
+    </section>
+
     <!-- Tokenomics Section -->
     <section class="tokenomics" id="tokenomics">
         <div class="container">
@@ -384,7 +433,7 @@
             <div class="section-header">
                 <span class="section-tag">🐧 Making a Difference</span>
                 <h2 class="section-title">Protecting <span class="highlight">Real Penguins</span></h2>
-                <p class="section-subtitle">2% of every transaction goes directly to penguin conservation</p>
+                <p class="section-subtitle">2% of every transaction goes directly to penguin conservation <span class="live-indicator">●</span> Live Data</p>
             </div>
 
             <div class="charity-content">
@@ -392,12 +441,12 @@
                     <div class="charity-stat-card">
                         <div class="stat-icon">💰</div>
                         <div class="stat-number" id="totalDonated">$0</div>
-                        <div class="stat-label">Total Donated</div>
+                        <div class="stat-label">Total Donated <span class="live-indicator">●</span></div>
                     </div>
                     <div class="charity-stat-card">
                         <div class="stat-icon">🐧</div>
                         <div class="stat-number" id="penguinsHelped">0</div>
-                        <div class="stat-label">Penguins Helped*</div>
+                        <div class="stat-label">Penguins Helped* <span class="live-indicator">●</span></div>
                     </div>
                     <div class="charity-stat-card">
                         <div class="stat-icon">📊</div>
@@ -405,6 +454,8 @@
                         <div class="stat-label">Every Trade</div>
                     </div>
                 </div>
+                
+                <p class="charity-note" id="lastUpdate" style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Data updates automatically every 30 seconds</p>
 
                 <div class="charity-info">
                     <div class="charity-card main-card">
