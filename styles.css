@@ -1363,6 +1363,25 @@ section {
     text-align: center;
 }
 
+.airdrop-cta h3 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: var(--text);
+}
+
+.zealy-widget-container {
+    background: var(--dark-lighter);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(78, 205, 196, 0.3);
+    min-height: 400px;
+}
+
+.airdrop-buttons {
+    margin: 24px 0;
+}
+
 .airdrop-cta .airdrop-btn {
     font-size: 1.2rem;
     padding: 18px 48px;

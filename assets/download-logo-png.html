@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download DERANGED Logo as PNG</title>
+    <style>
+        body {
+            background: #1a1a2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 2px solid #4ECDC4;
+            margin: 20px;
+        }
+        button {
+            background: #4ECDC4;
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #3db8b0;
+        }
+        h1 { color: #4ECDC4; }
+    </style>
+</head>
+<body>
+    <h1>🐧 DERANGED Logo PNG Generator</h1>
+    <p>Click the button to download the logo as PNG (512x512)</p>
+    
+    <canvas id="canvas" width="512" height="512"></canvas>
+    
+    <button onclick="downloadPNG()">📥 Download PNG (512x512)</button>
+    <button onclick="downloadPNG256()">📥 Download PNG (256x256)</button>
+    
+    <script>
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="250" fill="#1a1a2e"/>
+  <circle cx="256" cy="256" r="230" fill="#0f0f1a" stroke="#4ECDC4" stroke-width="3"/>
+  <polygon points="100,380 180,280 260,380" fill="#2a2a4e"/>
+  <polygon points="200,380 300,250 400,380" fill="#3a3a5e"/>
+  <polygon points="320,380 420,300 480,380" fill="#2a2a4e"/>
+  <polygon points="180,280 160,310 200,310" fill="#ffffff" opacity="0.3"/>
+  <polygon points="300,250 270,290 330,290" fill="#ffffff" opacity="0.3"/>
+  <ellipse cx="256" cy="400" rx="200" ry="30" fill="#4ECDC4" opacity="0.2"/>
+  <ellipse cx="256" cy="340" rx="45" ry="60" fill="#1a1a2e"/>
+  <ellipse cx="256" cy="345" rx="30" ry="45" fill="#ffffff"/>
+  <circle cx="256" cy="270" r="35" fill="#1a1a2e"/>
+  <ellipse cx="256" cy="275" rx="20" ry="22" fill="#ffffff"/>
+  <circle cx="265" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="267" cy="263" r="2" fill="#4ECDC4"/>
+  <circle cx="248" cy="265" r="6" fill="#1a1a2e"/>
+  <circle cx="250" cy="263" r="2" fill="#4ECDC4"/>
+  <polygon points="256,275 270,285 256,290 242,285" fill="#e74c3c"/>
+  <ellipse cx="210" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(-15 210 330)"/>
+  <ellipse cx="302" cy="330" rx="12" ry="35" fill="#1a1a2e" transform="rotate(15 302 330)"/>
+  <ellipse cx="240" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+  <ellipse cx="272" cy="400" rx="15" ry="8" fill="#e74c3c"/>
+</svg>`;
+
+        function renderToCanvas(size) {
+            const canvas = document.getElementById('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            const blob = new Blob([svg], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(blob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+            return canvas;
+        }
+
+        function downloadPNG() {
+            const canvas = renderToCanvas(512);
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.download = 'deranged-logo-512.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }, 100);
+        }
+
+        function downloadPNG256() {
+            const canvas = renderToCanvas(256);
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.download = 'deranged-logo-256.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }, 100);
+        }
+
+        // Render on load
+        renderToCanvas(512);
+    </script>
+</body>
+</html>
